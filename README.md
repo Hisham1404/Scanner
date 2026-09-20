@@ -4,10 +4,23 @@ A browser tool for sweeping a room for hidden cameras: lens-glint scanning with 
 phone camera and torch, a guided physical search, and what to do under Indian law
 if you actually find one.
 
+**Live: <https://scanner-sigma-wine.vercel.app>**
+
 Static HTML, CSS and JavaScript. No build step, no dependencies, no server, no
 analytics. Everything runs in the browser and nothing leaves the device.
 
-## Run it
+## Deployment
+
+Deployed on Vercel as a static site — no framework, no build command, no output
+directory. The project is `scanner`; the production URL is above.
+
+The project is **not** connected to the repository for automatic deploys. The
+deployment was created from the GitHub source directly, which does not install
+the webhook, so pushing to this branch will not rebuild it. To turn that on,
+open the project in the Vercel dashboard and connect the Git repository under
+Settings → Git; after that every push to the default branch deploys on its own.
+
+## Run it locally
 
 ```
 python3 -m http.server 8000
