@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Report exports and saved evidence frames are shared from here. -->
+    <cache-path name="exports" path="exports/" />
+</paths>

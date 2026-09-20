@@ -6,6 +6,10 @@ if you actually find one.
 
 **Live: <https://scanner-sigma-wine.vercel.app>**
 
+**Android app: [`android/`](android/)** — adds the network, Wi-Fi and Bluetooth
+scanning the web platform makes impossible, and locks camera exposure during
+torch pulsing. Install the APK from the Actions tab; see [android/README.md](android/README.md).
+
 Static HTML, CSS and JavaScript. No build step, no dependencies, no server, no
 analytics. Everything runs in the browser and nothing leaves the device.
 

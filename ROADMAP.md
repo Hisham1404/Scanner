@@ -1,5 +1,12 @@
 # From the website to the app
 
+> **Status.** Phases 1, 2 and 4 are built and shipping in [`android/`](android/):
+> the scanner is ported to CameraX with exposure and white-balance lock, and the
+> app does a subnet TCP sweep, SSDP, ONVIF WS-Discovery, mDNS, Wi-Fi AP scanning
+> and BLE scanning. Phase 3 (traffic-pattern correlation) and phase 5 (evidence
+> package export) are not built yet. The rest of this document is the original
+> plan, kept as written.
+
 The website does everything the web platform allows. This is what it cannot do,
 why, and what the phone app is for.
 
