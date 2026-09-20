@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scanner &mdash; find hidden cameras in a room</title>
+<meta name="description" content="A browser tool for sweeping a room for hidden cameras: lens-glint scanning with your phone camera, a guided physical search, and what to do under Indian law if you find one.">
+<meta name="theme-color" content="#0a0c0f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="#2dd4bf" stroke-width="1.7"/>
+        <circle cx="12" cy="12" r="3.4" stroke="#2dd4bf" stroke-width="1.7"/>
+        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="#2dd4bf" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      Scanner
+    </a>
+    <span class="brand-sub">hidden camera sweep</span>
+  </div>
+  <nav class="tabs" aria-label="Sections">
+    <a class="tab" href="index.html">Start</a>
+    <a class="tab" href="scan.html">Scan</a>
+    <a class="tab" href="sweep.html">Sweep</a>
+    <a class="tab" href="guide.html">Guide</a>
+    <a class="tab" href="legal.html">Legal</a>
+    <a class="tab" href="report.html">Report</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">Room sweep</p>
+  <h1>Find the camera that should not be in the room.</h1>
+  <p class="lede">Three things, in order: light the room up and look for a lens bouncing light back at you, walk the room by hand in the order that finds things fastest, and know exactly what to do if you actually find something.</p>
+
+  <div class="btn-row" style="margin: 18px 0 8px;">
+    <a class="btn btn-primary" href="scan.html">Start scanning</a>
+    <a class="btn" href="sweep.html">Walk the sweep</a>
+  </div>
+
+  <div class="note warn">
+    <strong>Read this before you trust any result</strong>
+    A clean sweep means you did not find a camera. It does not mean there isn&rsquo;t one. Cameras that record to an SD card and transmit nothing are invisible to every app, every detector and every network scan on the market &mdash; the only things that find those are optics and your hands.
+  </div>
+
+  <h2>How it works</h2>
+
+  <div class="grid two">
+    <a class="card card-link" href="scan.html">
+      <h3>1 &middot; Lens-glint scan</h3>
+      <p>A lens focused onto a sensor bounces light straight back at its source. Your torch sits right beside your camera, so a hidden lens lights up as a small bright dot. The scanner strobes the torch and analyses only the light the torch put there, which cancels out room lights, standby LEDs and windows.</p>
+    </a>
+    <a class="card card-link" href="sweep.html">
+      <h3>2 &middot; Guided sweep</h3>
+      <p>Seven zones, walked in the order that actually finds things: bathroom first, then mirrors and changing areas, then the bed, then everything above head height. Each checkpoint names the specific spot and what the tell looks like.</p>
+    </a>
+    <a class="card card-link" href="guide.html">
+      <h3>3 &middot; Know what you are looking for</h3>
+      <p>Six device types, what each one looks like, and which ones a scan can and cannot find. Built from reported cases in Kerala and across India &mdash; including what the device actually turned out to be in each one.</p>
+    </a>
+    <a class="card card-link" href="legal.html">
+      <h3>4 &middot; If you find one</h3>
+      <p>What not to touch, what to photograph, who to call, and the sections of Indian law that apply. Plus a written record you can hand to a police station.</p>
+    </a>
+  </div>
+
+  <h2>Where these are actually found</h2>
+  <p>Not guesswork &mdash; these are the places cameras were found in reported cases. The bathroom and the changing area come up far more often than the bedroom.</p>
+  <div class="card"><ol id="hotspots" style="margin:0"></ol></div>
+
+  <h2>What this tool can and cannot do</h2>
+  <p>Most &ldquo;hidden camera detector&rdquo; apps are not honest about this, so here it is plainly.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Method</th><th>Works?</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Lens retroreflection</td>
+          <td><span class="yes">Yes</span></td>
+          <td>The one method that reaches every device type, including offline SD-card cameras. Published work (LAPD, ACM SenSys 2021) measured 88.9% detection this way against 46% for the naked eye.</td>
+        </tr>
+        <tr>
+          <td>Physical search</td>
+          <td><span class="yes">Yes</span></td>
+          <td>Unglamorous and effective. In nearly every case in the guide, a person found the camera by noticing something out of place.</td>
+        </tr>
+        <tr>
+          <td>Infrared LED spotting</td>
+          <td><span class="partial">Barely</span></td>
+          <td>Night-vision cameras emit infrared, but flagship phone cameras filter it out. Measured detection rates on current Samsung and Apple flagships are under 10%. Included as a bonus mode, not a test you can rely on.</td>
+        </tr>
+        <tr>
+          <td>Magnetometer &ldquo;detectors&rdquo;</td>
+          <td><span class="no">No</span></td>
+          <td>Deliberately left out. One published test had a magnetometer app flag 47 anomalies in a single hotel room, none of which were cameras. It reacts to wiring, pipes and hinges.</td>
+        </tr>
+        <tr>
+          <td>Wi-Fi and network scanning</td>
+          <td><span class="no">Not in a browser</span></td>
+          <td>The strongest automated signal for networked cameras, and no website can do it on any browser. Scanning Wi-Fi, listing devices on a network and reading MAC addresses all need a native app. This is the main reason for building one.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Your phone is a good instrument for this</strong>
+    A bright torch mounted next to a high-resolution camera with optical zoom is genuinely the right hardware for retroreflection work. What it is not is a radio scanner &mdash; that part needs the app.
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Scanner</strong> runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account and no analytics. Your findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
+    <p>This is a search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
+  </div>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var ol = document.getElementById('hotspots');
+  HOTSPOTS_TOP.forEach(function (h) {
+    var li = document.createElement('li');
+    li.textContent = h;
+    ol.appendChild(li);
+  });
+});
+</script>
+</body>
+</html>

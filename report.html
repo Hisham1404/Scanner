@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Report &mdash; Scanner</title>
+<meta name="description" content="Turn flagged findings into a written, timestamped record and a complaint draft for an Indian police station.">
+<meta name="theme-color" content="#0a0c0f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="#2dd4bf" stroke-width="1.7"/>
+        <circle cx="12" cy="12" r="3.4" stroke="#2dd4bf" stroke-width="1.7"/>
+        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="#2dd4bf" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      Scanner
+    </a>
+    <span class="brand-sub">hidden camera sweep</span>
+  </div>
+  <nav class="tabs" aria-label="Sections">
+    <a class="tab" href="index.html">Start</a>
+    <a class="tab" href="scan.html">Scan</a>
+    <a class="tab" href="sweep.html">Sweep</a>
+    <a class="tab" href="guide.html">Guide</a>
+    <a class="tab" href="legal.html">Legal</a>
+    <a class="tab" href="report.html">Report</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">Findings</p>
+  <h1>What you flagged.</h1>
+  <p class="lede">Everything you marked suspicious during a sweep or logged from the scanner, with the time you recorded it. This never leaves your browser.</p>
+
+  <div id="findingsList"></div>
+
+  <div id="draftWrap" hidden>
+    <h2>Written record</h2>
+    <p>Fill these in and the draft below updates. A dated, specific written account carries real weight at a police station &mdash; far more than describing it from memory at the counter.</p>
+
+    <div class="card">
+      <label class="small" for="who">Your name</label>
+      <input type="text" id="who" placeholder="Name as you would sign it"
+             style="width:100%;margin:4px 0 12px;padding:10px;border-radius:8px;border:1px solid #222932;background:#06080a;color:#e8edf4;font:inherit">
+      <label class="small" for="place">Place &mdash; name and address</label>
+      <input type="text" id="place" placeholder="Hotel / hostel / flat, with the address"
+             style="width:100%;margin:4px 0 0;padding:10px;border-radius:8px;border:1px solid #222932;background:#06080a;color:#e8edf4;font:inherit">
+    </div>
+
+    <textarea class="report-out" id="draft" readonly aria-label="Draft report"></textarea>
+
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn btn-primary" id="btnCopy" type="button">Copy</button>
+      <button class="btn" id="btnDownload" type="button">Download .txt</button>
+    </div>
+    <p class="small" id="copyNote" style="min-height:1.2em"></p>
+
+    <div class="note warn">
+      <strong>This is your own account, not evidence in itself</strong>
+      It records what you observed and when. It is not a forensic finding and it is not legal advice. What makes it useful is that it is contemporaneous and specific &mdash; so write it before memory softens the details.
+    </div>
+
+    <div class="btn-row" style="margin-top:14px">
+      <a class="btn" href="legal.html">What to do next &rarr;</a>
+      <button class="btn btn-sm btn-danger" id="btnClear" type="button">Delete all findings</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Scanner</strong> runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account and no analytics. Your findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
+    <p>This is a search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
+  </div>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>

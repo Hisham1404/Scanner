@@ -1,0 +1,14 @@
+{
+  "name": "Scanner — hidden camera sweep",
+  "short_name": "Scanner",
+  "description": "Sweep a room for hidden cameras: lens-glint scanning, a guided physical search, and what to do under Indian law if you find one.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0c0f",
+  "theme_color": "#0a0c0f",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
