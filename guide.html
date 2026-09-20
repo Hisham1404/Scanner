@@ -5,108 +5,149 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Guide &mdash; Scanner</title>
 <meta name="description" content="The six kinds of hidden camera found in reported cases across Kerala and India, what each looks like, and which detection methods actually reach it.">
-<meta name="theme-color" content="#0a0c0f">
+<meta name="theme-color" content="#08080a">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jetbrains-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="index.html">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="#2dd4bf" stroke-width="1.7"/>
-        <circle cx="12" cy="12" r="3.4" stroke="#2dd4bf" stroke-width="1.7"/>
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="#2dd4bf" stroke-width="1.7" stroke-linecap="round"/>
+<header class="masthead">
+  <div class="masthead__bar">
+    <a class="mark" href="index.html">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.1"/>
+        <circle cx="8" cy="8" r="1.7" fill="currentColor"/>
       </svg>
       Scanner
     </a>
-    <span class="brand-sub">hidden camera sweep</span>
+    <span class="mark__meta">Room sweep</span>
   </div>
-  <nav class="tabs" aria-label="Sections">
-    <a class="tab" href="index.html">Start</a>
-    <a class="tab" href="scan.html">Scan</a>
-    <a class="tab" href="sweep.html">Sweep</a>
-    <a class="tab" href="guide.html">Guide</a>
-    <a class="tab" href="legal.html">Legal</a>
-    <a class="tab" href="report.html">Report</a>
+  <nav class="nav" aria-label="Sections">
+    <a href="index.html">Start</a>
+    <a href="scan.html">Scan</a>
+    <a href="sweep.html">Sweep</a>
+    <a href="guide.html">Guide</a>
+    <a href="legal.html">Legal</a>
+    <a href="report.html">Report</a>
   </nav>
 </header>
 
-<main class="wrap">
+<main class="wrap wrap--wide">
 
-  <p class="eyebrow">Know the target</p>
-  <h1>Six kinds of camera, and what each one gives away.</h1>
-  <p class="lede">Drawn from reported cases in Kerala and elsewhere in India. The column that matters most is the one telling you which of these a network scan will never find.</p>
+  <p class="label">Know the target</p>
+  <h1 class="display">Six kinds of camera, and what each gives away.</h1>
+  <p class="lead">Drawn from reported cases in Kerala and elsewhere in India. The column that matters most is the one telling you which of these a network scan will never find.</p>
 
-  <div id="deviceList"></div>
+  <section class="sec">
+    <span class="label">Device types</span>
+    <div id="deviceList"></div>
+  </section>
 
-  <h2>Detection coverage</h2>
-  <p>Read this before you decide a room is clean.</p>
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th>Device type</th><th>Network scan finds it?</th><th>Lens glint finds it?</th></tr></thead>
-      <tbody id="coverage"></tbody>
-    </table>
-  </div>
+  <section class="sec">
+    <span class="label">Detection coverage</span>
+    <p class="muted" style="margin-bottom:24px">Read this before you decide a room is clean.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Device type</th><th>Network scan</th><th>Lens glint</th></tr></thead>
+        <tbody id="coverage"></tbody>
+      </table>
+    </div>
 
-  <div class="note danger">
-    <strong>The important row is &ldquo;local storage only&rdquo;</strong>
-    A camera recording to an SD card transmits nothing. No network scan, no RF detector and no app will ever see it. In the Delhi rented-home case the landlord&rsquo;s son simply pulled the memory cards by hand and copied the footage to a laptop. Only optics and a physical search reach these, which is why the scanner and the sweep come before anything else in this tool.
-  </div>
+    <div class="aside aside--alert">
+      <span class="label">The row that matters is local storage</span>
+      <p>A camera recording to an SD card transmits nothing. No network scan, no RF detector and no app will ever see it. In the Delhi rented-home case the landlord&rsquo;s son simply pulled the memory cards by hand and copied the footage to a laptop. Only optics and a physical search reach these, which is why the scanner and the sweep come before anything else here.</p>
+    </div>
+  </section>
 
-  <h2>Reported cases</h2>
-  <p>What the device actually turned out to be, and how it was found. That last part is the useful one &mdash; in nearly every case a person noticed something out of place, not a gadget.</p>
-  <div id="caseList"></div>
+  <section class="sec">
+    <span class="label">Reported cases</span>
+    <p class="muted" style="margin-bottom:24px">What the device actually turned out to be, and how it surfaced. That last part is the useful one &mdash; in nearly every case a person noticed something out of place, not a gadget.</p>
+    <div id="caseList"></div>
+  </section>
 
-  <h2>What gives them away, in general</h2>
-  <div class="card">
-    <ul style="margin:0">
-      <li><strong>Power.</strong> A camera runs on mains or a battery. Battery cameras die in hours, so anything meant to run for a shift is plugged in. Count the things plugged in and find the one nobody can explain.</li>
-      <li><strong>A hole with no purpose.</strong> A pinhole 1&ndash;3 mm across on a face with no grille, no screw and no LED. Fresh drill dust beneath it, fresh filler around it, or a bead of silicone.</li>
-      <li><strong>Line of sight.</strong> Every camera has to be able to see the thing it was put there to see. Stand where you would undress and look back at every object that can see you. That narrows a room to a handful of objects very quickly.</li>
-      <li><strong>Heat.</strong> Continuous recording makes a device warm. Touch the back of anything you are unsure about.</li>
-      <li><strong>Objects out of context.</strong> A charger in a bathroom. A clock facing the bed instead of the door. A dustbin with wiring. A smoke detector in a room with no others. This is what actually catches them.</li>
-      <li><strong>Newness.</strong> One bright screw among tarnished ones, disturbed paint, a switchboard cleaner than the wall around it.</li>
-    </ul>
-  </div>
+  <section class="sec">
+    <span class="label">What gives them away</span>
+    <div class="index">
+      <div class="index__row"><span class="index__num">01</span><span class="index__body">
+        <h3>Power</h3>
+        <p>A camera runs on mains or a battery, and battery cameras die in hours. Anything meant to run for a shift is plugged in. Count the things plugged in and find the one nobody can explain.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">02</span><span class="index__body">
+        <h3>A hole with no purpose</h3>
+        <p>One to three millimetres across, on a face with no grille, no screw and no LED. Fresh drill dust beneath it, fresh filler around it, or a bead of silicone.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">03</span><span class="index__body">
+        <h3>Line of sight</h3>
+        <p>Every camera must see the thing it was put there to see. Stand where you would undress and look back at every object that can see you. That narrows a room to a handful of objects very quickly.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">04</span><span class="index__body">
+        <h3>Heat</h3>
+        <p>Continuous recording makes a device warm. Touch the back of anything you are unsure about.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">05</span><span class="index__body">
+        <h3>Objects out of context</h3>
+        <p>A charger in a bathroom. A clock facing the bed instead of the door. A dustbin with wiring. A smoke detector in a room with no others. This is what actually catches them.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">06</span><span class="index__body">
+        <h3>Newness</h3>
+        <p>One bright screw among tarnished ones, disturbed paint, a switchboard cleaner than the wall around it.</p>
+      </span></div>
+    </div>
+  </section>
 
-  <h2>Why most detector apps do not work</h2>
-  <p>Worth knowing, because you will be offered plenty of them.</p>
-  <div class="card">
-    <p><strong>Magnetometer apps.</strong> They read the phone&rsquo;s compass and call any disturbance a camera. A published test had one flag 47 separate anomalies in a single hotel room, none of which were cameras. Wiring in walls, pipes, hinges, door frames and speakers all set it off. This tool deliberately has no magnetometer mode.</p>
-    <p><strong>Infrared modes.</strong> Real physics &mdash; night-vision cameras do emit infrared at 850 or 940 nm &mdash; but modern phone cameras have strong infrared-cut filters over the sensor. Measured detection rates on current Samsung and Apple flagships fall below 10%. It is included here as a third mode with that caveat attached, not as a test to rely on.</p>
-    <p style="margin-bottom:0"><strong>What is left.</strong> Lens retroreflection, which has published support behind it, and network scanning, which works well but needs a native app. Everything else being sold is noise.</p>
-  </div>
+  <section class="sec">
+    <span class="label">Why most detector apps do not work</span>
+    <p class="muted" style="margin-bottom:22px">Worth knowing, because you will be offered plenty of them.</p>
 
-  <div class="note">
-    <strong>Sources behind the technical claims</strong>
-    LAPD: <em>Hidden Spy Camera Detection using Smartphone Time-of-Flight Sensors</em>, ACM SenSys 2021 (National University of Singapore / Yonsei University) &mdash; 88.9% detection from lens retroreflection against 46% for the naked eye. DeWiCam, AsiaCCS 2018, and later traffic-pattern work &mdash; wireless cameras are identifiable from traffic shape even when the payload is encrypted. Case details are from reported Indian news coverage.
-  </div>
+    <div class="entry">
+      <h3>Magnetometer apps</h3>
+      <p>They read the phone&rsquo;s compass and call any disturbance a camera. A published test had one flag 47 separate anomalies in a single hotel room, none of which were cameras. Wiring in walls, pipes, hinges, door frames and speakers all set it off. This tool deliberately has no magnetometer mode.</p>
+    </div>
+    <div class="entry">
+      <h3>Infrared modes</h3>
+      <p>Real physics &mdash; night-vision cameras do emit infrared at 850 or 940 nm &mdash; but modern phone cameras have strong infrared-cut filters over the sensor. Measured detection rates on current Samsung and Apple flagships fall below 10%. It is included here as a third mode with that caveat attached, not as a test to rely on.</p>
+    </div>
+    <div class="entry">
+      <h3>What is left</h3>
+      <p>Lens retroreflection, which has published support behind it, and network scanning, which works well but needs a native app. Everything else being sold is noise.</p>
+    </div>
+
+    <div class="aside" style="margin-top:30px">
+      <span class="label">Sources</span>
+      <p>LAPD, <em>Hidden Spy Camera Detection using Smartphone Time-of-Flight Sensors</em>, ACM SenSys 2021 (National University of Singapore / Yonsei University) &mdash; 88.9% detection from lens retroreflection against 46% for the naked eye. DeWiCam, AsiaCCS 2018, and later traffic-pattern work &mdash; wireless cameras are identifiable from traffic shape even when the payload is encrypted. Case details are from reported Indian news coverage.</p>
+    </div>
+  </section>
 
 </main>
 
 <footer>
-  <div class="wrap">
-    <p><strong>Scanner</strong> runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account and no analytics. Your findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
-    <p>This is a search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
+  <div class="wrap wrap--wide">
+    <p>Scanner runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account, no analytics. Findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
+    <p>A search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
   </div>
 </footer>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var mark = { yes: '<span class="yes">Yes</span>', no: '<span class="no">No</span>', partial: '<span class="partial">Sometimes</span>' };
+  var mark = {
+    yes:     '<span class="v v--yes">Finds it</span>',
+    no:      '<span class="v v--no">Blind</span>',
+    partial: '<span class="v v--part">Sometimes</span>'
+  };
 
   var dl = document.getElementById('deviceList');
-  DEVICE_TYPES.forEach(function (d) {
+  DEVICE_TYPES.forEach(function (d, i) {
     var el = document.createElement('div');
-    el.className = 'card';
+    el.className = 'entry';
     el.innerHTML =
-      '<h3 style="margin-top:0">' + d.name + '</h3>' +
+      '<div class="entry__head"><h3>' + d.name + '</h3>' +
+      '<span class="label">' + String(i + 1).padStart(2, '0') + '</span></div>' +
       '<p>' + d.detail + '</p>' +
-      '<p class="small"><strong>Seen in:</strong> ' + d.seen + '</p>' +
-      '<p style="margin-bottom:0"><strong>What gives it away:</strong> ' + d.tell + '</p>';
+      '<div class="field"><span class="label">Seen in</span><span>' + d.seen + '</span></div>' +
+      '<div class="field"><span class="label">Tell</span><span>' + d.tell + '</span></div>';
     dl.appendChild(el);
   });
 
@@ -120,12 +161,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var cl = document.getElementById('caseList');
   CASES.forEach(function (c) {
     var el = document.createElement('div');
-    el.className = 'card';
+    el.className = 'entry';
     el.innerHTML =
-      '<h3 style="margin-top:0">' + c.place + ' <span class="tag">' + c.year + '</span></h3>' +
+      '<div class="entry__head"><h3>' + c.place + '</h3>' +
+      '<span class="label">' + c.year + '</span></div>' +
       '<p>' + c.what + '</p>' +
-      '<p class="small" style="margin-bottom:4px"><strong>Device:</strong> ' + c.device + '</p>' +
-      '<p class="small" style="margin-bottom:0"><strong>How it surfaced:</strong> ' + c.found + '</p>';
+      '<div class="field"><span class="label">Device</span><span>' + c.device + '</span></div>' +
+      '<div class="field"><span class="label">Surfaced</span><span>' + c.found + '</span></div>';
     cl.appendChild(el);
   });
 });

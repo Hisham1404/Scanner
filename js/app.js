@@ -62,7 +62,7 @@ function fmtTime(iso) {
 /* mark the active tab */
 function markNav() {
   const here = location.pathname.split('/').pop() || 'index.html';
-  $$('.tab').forEach((a) => {
+  $$('.nav a').forEach((a) => {
     const target = a.getAttribute('href');
     if (target === here) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
@@ -72,8 +72,8 @@ function markNav() {
 /* badge the report tab with the finding count */
 function markFindingsBadge() {
   const n = Findings.count();
-  const tab = $('.tab[href="report.html"]');
-  if (tab) tab.textContent = n > 0 ? 'Report · ' + n : 'Report';
+  const tab = $('.nav a[href="report.html"]');
+  if (tab) tab.textContent = n > 0 ? 'Report ' + n : 'Report';
 }
 
 document.addEventListener('DOMContentLoaded', () => {

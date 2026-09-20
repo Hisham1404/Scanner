@@ -3,7 +3,7 @@
    joined, or with no signal at all. The tool has to work anyway, so everything
    is cached on first visit and served cache-first afterwards. */
 
-const CACHE = 'scanner-v1';
+const CACHE = 'scanner-v2';
 const ASSETS = [
   'index.html',
   'scan.html',
@@ -18,6 +18,8 @@ const ASSETS = [
   'js/sweep.js',
   'js/report.js',
   'assets/icon.svg',
+  'assets/fonts/inter-latin.woff2',
+  'assets/fonts/jetbrains-latin.woff2',
   'manifest.webmanifest'
 ];
 

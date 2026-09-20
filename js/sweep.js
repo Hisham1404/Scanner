@@ -19,13 +19,9 @@ const Sweep = {
 
   key(zoneId, i) { return zoneId + ':' + i; },
 
-  total() {
-    return ZONES.reduce((n, z) => n + z.checks.length, 0);
-  },
+  total() { return ZONES.reduce((n, z) => n + z.checks.length, 0); },
 
-  answered() {
-    return Object.keys(this.state).length;
-  },
+  answered() { return Object.keys(this.state).length; },
 
   go(i) {
     if (i < 0 || i >= ZONES.length) return;
@@ -44,16 +40,18 @@ const Sweep = {
     const nav = $('#zoneNav');
     nav.innerHTML = '';
     let active = null;
+
     ZONES.forEach((z, i) => {
       const b = document.createElement('button');
-      b.className = 'zone-chip' + (this.zoneDone(z) ? ' done' : '');
       b.type = 'button';
-      b.textContent = (i + 1) + '. ' + z.name;
+      b.textContent = z.name;
+      if (this.zoneDone(z)) b.className = 'is-done';
       b.setAttribute('aria-pressed', String(i === this.zone));
       b.addEventListener('click', () => this.go(i));
       nav.appendChild(b);
       if (i === this.zone) active = b;
     });
+
     /* keep the zone you are on visible in the strip */
     if (active && active.scrollIntoView) {
       active.scrollIntoView({ block: 'nearest', inline: 'center' });
@@ -62,9 +60,10 @@ const Sweep = {
   },
 
   renderProgress() {
-    const pct = Math.round((this.answered() / this.total()) * 100);
-    $('#progBar').style.width = pct + '%';
-    $('#progText').textContent = this.answered() + ' of ' + this.total() + ' checkpoints · ' + pct + '%';
+    const done = this.answered();
+    const all = this.total();
+    $('#progBar').style.width = Math.round((done / all) * 100) + '%';
+    $('#progText').textContent = done + ' / ' + all;
   },
 
   renderZone() {
@@ -74,67 +73,56 @@ const Sweep = {
 
     const head = document.createElement('div');
     head.innerHTML =
-      '<p class="eyebrow">Zone ' + (this.zone + 1) + ' of ' + ZONES.length + '</p>' +
-      '<h1>' + z.name + '</h1>' +
-      '<p class="lede">' + z.blurb + '</p>';
+      '<p class="label">Zone ' + (this.zone + 1) + ' of ' + ZONES.length + '</p>' +
+      '<h1 class="display">' + z.name + '</h1>' +
+      '<p class="lead">' + z.blurb + '</p>';
     host.appendChild(head);
 
     if (z.web === false) {
       const n = document.createElement('div');
-      n.className = 'note warn';
-      n.innerHTML = '<strong>This zone is manual for now</strong>' +
-        'Wi-Fi scanning, device enumeration and MAC-address lookups are not available to any website on any browser. ' +
-        'They are the headline feature of the phone app in the roadmap. Until then, do these by hand — they are still worth doing.';
+      n.className = 'aside aside--caution';
+      n.innerHTML =
+        '<span class="label">Manual for now</span>' +
+        '<p>Wi-Fi scanning, device enumeration and MAC-address lookups are not available to any website on any browser. ' +
+        'They are the headline feature of the phone app in the roadmap. Until then, do these by hand &mdash; they are still worth doing.</p>';
       host.appendChild(n);
     }
 
-    const card = document.createElement('div');
-    card.className = 'card';
+    const list = document.createElement('div');
+    list.className = 'checks';
 
     z.checks.forEach((c, i) => {
-      const k = this.key(z.id, i);
-      const cur = this.state[k];
+      const cur = this.state[this.key(z.id, i)];
 
       const row = document.createElement('div');
-      row.className = 'check' + (cur === 'flag' ? ' flagged' : '');
+      row.className = 'check' + (cur === 'flag' ? ' is-flagged' : '');
 
       const body = document.createElement('div');
-      body.className = 'check-body';
       body.innerHTML =
-        '<div class="check-title">' + c.t + '</div>' +
-        '<div class="check-hint">' + c.h + '</div>' +
-        (c.c ? '<div class="check-case">' + c.c + '</div>' : '');
+        '<div class="check__t">' + c.t + '</div>' +
+        '<div class="check__h">' + c.h + '</div>' +
+        (c.c ? '<div class="check__c">' + c.c + '</div>' : '');
 
       const acts = document.createElement('div');
-      acts.className = 'check-acts';
+      acts.className = 'check__acts';
 
-      const ok = document.createElement('button');
-      ok.type = 'button';
-      ok.dataset.act = 'ok';
-      ok.title = 'Checked, looks clear';
-      ok.setAttribute('aria-label', 'Mark clear: ' + c.t);
-      ok.textContent = '✓';
-      ok.setAttribute('aria-pressed', String(cur === 'ok'));
+      [['ok', 'Clear', 'Mark clear'], ['flag', 'Flag', 'Flag as suspicious']].forEach(([act, text, aria]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.act = act;
+        b.textContent = text;
+        b.setAttribute('aria-label', aria + ': ' + c.t);
+        b.setAttribute('aria-pressed', String(cur === act));
+        b.addEventListener('click', () => this.mark(z, i, act));
+        acts.appendChild(b);
+      });
 
-      const flag = document.createElement('button');
-      flag.type = 'button';
-      flag.dataset.act = 'flag';
-      flag.title = 'Suspicious — add to report';
-      flag.setAttribute('aria-label', 'Flag as suspicious: ' + c.t);
-      flag.textContent = '⚠';
-      flag.setAttribute('aria-pressed', String(cur === 'flag'));
-
-      ok.addEventListener('click', () => this.mark(z, i, 'ok'));
-      flag.addEventListener('click', () => this.mark(z, i, 'flag'));
-
-      acts.appendChild(ok);
-      acts.appendChild(flag);
       row.appendChild(body);
       row.appendChild(acts);
-      card.appendChild(row);
+      list.appendChild(row);
     });
 
-    host.appendChild(card);
+    host.appendChild(list);
 
     $('#btnPrev').disabled = this.zone === 0;
     $('#btnNext').disabled = this.zone === ZONES.length - 1;
@@ -143,10 +131,11 @@ const Sweep = {
     if (this.zone === ZONES.length - 1) {
       done.hidden = false;
       done.innerHTML =
-        '<div class="note"><strong>That is the full sweep</strong>' +
-        'You have walked every zone. If you flagged anything, the Report tab turns it into a written record with timestamps, ' +
-        'plus a complaint draft you can take to a police station.</div>' +
-        '<a class="btn btn-primary btn-block" href="report.html">Open the report</a>';
+        '<div class="aside" style="margin-top:34px">' +
+        '<span class="label">That is the full sweep</span>' +
+        '<p>You have walked every zone. If you flagged anything, the report turns it into a written record with timestamps, ' +
+        'plus a complaint draft you can take to a police station.</p></div>' +
+        '<a class="btn btn--primary btn--block" href="report.html">Open the report</a>';
     } else {
       done.hidden = true;
       done.innerHTML = '';
@@ -192,9 +181,7 @@ const Sweep = {
     this.state = {};
     Store.set('sweep', {});
     Store.set('sweepZone', 0);
-    Findings.all()
-      .filter((f) => f.kind === 'sweep')
-      .forEach((f) => Findings.remove(f.id));
+    Findings.all().filter((f) => f.kind === 'sweep').forEach((f) => Findings.remove(f.id));
     this.zone = 0;
     this.renderZoneNav();
     this.renderZone();

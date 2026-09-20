@@ -40,6 +40,8 @@ const MODE_HINTS = {
   ir: 'Front camera, torch off, lights off. Looks for infrared LEDs on night-vision cameras. Treat a negative result as meaningless — flagship IR-cut filters block most of this, with measured detection rates under 10%.'
 };
 
+const MODE_LABELS = { pulse: 'Pulse', live: 'Continuous', ir: 'Infrared' };
+
 const Scanner = {
   els: {},
   stream: null,
@@ -68,9 +70,11 @@ const Scanner = {
       overlay: $('#overlay'),
       msg: $('#stageMsg'),
       verdict: $('#verdict'),
+      vState: $('#verdictState'),
+      vPct: $('#verdictPct'),
+      vMeter: $('#verdictMeter'),
       vTitle: $('#verdictTitle'),
       vSub: $('#verdictSub'),
-      vDot: $('#verdictDot'),
       pillMode: $('#pillMode'),
       pillState: $('#pillState'),
       start: $('#btnStart'),
@@ -108,7 +112,7 @@ const Scanner = {
     });
 
     this.setMode('pulse');
-    this.setVerdict('idle', 'Camera off', 'Pick a mode and start the scan.');
+    this.setVerdict('idle', null, 'Camera off', 'Pick a mode and start the scan.');
   },
 
   setMode(mode) {
@@ -116,7 +120,7 @@ const Scanner = {
     this.els.modes.forEach((b) => {
       b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
     });
-    this.els.pillMode.textContent = mode;
+    this.els.pillMode.textContent = MODE_LABELS[mode];
     this.candidates = [];
     this.frameOn = this.frameOff = null;
 
@@ -144,7 +148,7 @@ const Scanner = {
         ? 'Camera permission was denied. Allow camera access for this site and try again.'
         : 'Could not open the camera: ' + (err && err.message ? err.message : String(err));
       this.setMsg(why);
-      this.setVerdict('idle', 'Camera unavailable', why);
+      this.setVerdict('idle', null, 'Camera unavailable', why);
       return;
     }
 
@@ -162,7 +166,7 @@ const Scanner = {
       this.toast('This browser will not let the page control the torch. Pulse mode needs it — switching to a torch-free scan. Use a separate torch held right next to the phone camera and the same physics still applies.');
       if (this.mode === 'pulse') this.mode = 'live';
       this.els.modes.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === this.mode)));
-      this.els.pillMode.textContent = this.mode;
+      this.els.pillMode.textContent = MODE_LABELS[this.mode];
       this.els.hint.textContent = MODE_HINTS[this.mode];
     }
 
@@ -179,8 +183,8 @@ const Scanner = {
     this.els.stop.disabled = false;
     this.els.shot.disabled = false;
     this.els.log.disabled = false;
-    this.els.pillState.textContent = 'scanning';
-    this.els.pillState.className = 'hud-pill live';
+    this.els.pillState.textContent = 'Scanning';
+    this.els.pillState.className = 'is-live';
 
     if (this.mode === 'live' && this.hasTorch) await this.setTorch(true);
     if (this.mode === 'ir') await this.setTorch(false);
@@ -213,10 +217,10 @@ const Scanner = {
       this.els.stop.disabled = true;
       this.els.shot.disabled = true;
       this.els.log.disabled = true;
-      this.els.pillState.textContent = 'idle';
-      this.els.pillState.className = 'hud-pill';
+      this.els.pillState.textContent = 'Idle';
+      this.els.pillState.className = '';
       this.setMsg('Camera off.');
-      this.setVerdict('idle', 'Camera off', 'Pick a mode and start the scan.');
+      this.setVerdict('idle', null, 'Camera off', 'Pick a mode and start the scan.');
     }
   },
 
@@ -583,26 +587,33 @@ const Scanner = {
 
     shown.forEach((c) => {
       const x = c.x * sx, y = c.y * sy;
-      const r = Math.max(22, c.r * sx * 2.6);
-      const strong = c.confidence >= 70;
-      const color = strong ? '#f4525f' : (c.confidence >= 48 ? '#f5a524' : '#93a0b1');
+      const r = Math.max(18, c.r * sx * 2.2);
+      const color = c.confidence >= 70 ? '#ff4a38'
+                  : c.confidence >= 48 ? '#d9a441'
+                  : 'rgba(237, 235, 230, 0.5)';
 
-      ctx.lineWidth = Math.max(2, cw / 300);
       ctx.strokeStyle = color;
+      ctx.lineWidth = Math.max(1.4, cw / 560);
+      ctx.lineCap = 'butt';
+
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.globalAlpha = 0.5;
-      ctx.beginPath();
-      ctx.arc(x, y, r * 1.5, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
+      /* four outward ticks, so the mark reads as a sight rather than a bubble */
+      const t0 = r * 1.4, t1 = r * 1.85;
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dx, dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(x + dx * t0, y + dy * t0);
+        ctx.lineTo(x + dx * t1, y + dy * t1);
+        ctx.stroke();
+      });
 
       ctx.fillStyle = color;
-      ctx.font = '600 ' + Math.round(cw / 32) + 'px ui-monospace, monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(c.confidence + '%', x, y - r - Math.round(cw / 50));
+      ctx.font = '500 ' + Math.round(cw / 42) + 'px "JetBrains Mono", ui-monospace, monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(c.confidence).padStart(2, '0'), x + t1 + cw / 80, y);
     });
 
     this.updateVerdict(shown);
@@ -610,40 +621,48 @@ const Scanner = {
 
   updateVerdict(shown) {
     const top = shown[0];
+
     if (!top) {
-      this.setVerdict(
-        'clear',
-        'Nothing standing out',
+      this.setVerdict('clear', null, 'Nothing standing out',
         this.mode === 'pulse'
           ? 'Keep moving slowly and re-cross the same spots from two or three angles before you call it clear.'
-          : 'Keep sweeping. Switch to Pulse mode to rule out glossy surfaces.'
-      );
-      this.els.pillState.className = 'hud-pill live';
-      this.els.pillState.textContent = 'scanning';
+          : 'Keep sweeping. Switch to Pulse mode to rule out glossy surfaces.');
+      this.setPill('Scanning', 'is-live');
       return;
     }
 
     if (top.confidence >= 70) {
-      this.setVerdict('hit', 'Strong retroreflection — ' + top.confidence + '%',
-        'Something at the ring is bouncing light straight back. Hold still, move a step left and right, and see whether it stays bright. If it does, go and look at that spot with your hands.');
-      this.els.pillState.className = 'hud-pill hot';
-      this.els.pillState.textContent = 'candidate';
+      this.setVerdict('hit', top.confidence, 'Strong retroreflection',
+        'Something at the mark is bouncing light straight back. Hold still, move a step left and right, and see whether it stays bright. If it does, go and look at that spot with your hands.');
+      this.setPill('Detected', 'is-hot');
     } else if (top.confidence >= 48) {
-      this.setVerdict('maybe', 'Possible reflector — ' + top.confidence + '%',
+      this.setVerdict('maybe', top.confidence, 'Possible reflector',
         'Could be a lens, could be chrome or glass. Re-scan it in Pulse mode from a different angle before deciding.');
-      this.els.pillState.className = 'hud-pill live';
-      this.els.pillState.textContent = 'checking';
+      this.setPill('Checking', 'is-live');
     } else {
-      this.setVerdict('clear', 'Weak return — ' + top.confidence + '%',
+      this.setVerdict('clear', top.confidence, 'Weak return',
         'Probably an ordinary shiny surface. Keep sweeping.');
-      this.els.pillState.className = 'hud-pill live';
-      this.els.pillState.textContent = 'scanning';
+      this.setPill('Scanning', 'is-live');
     }
   },
 
-  setVerdict(kind, title, sub) {
+  setPill(text, cls) {
+    this.els.pillState.textContent = text;
+    this.els.pillState.className = cls || '';
+  },
+
+  setVerdict(kind, pct, title, sub) {
     if (!this.els.verdict) return;
-    this.els.verdict.className = 'verdict ' + kind;
+
+    const states = { idle: 'Standby', clear: 'Clear', maybe: 'Uncertain', hit: 'Detected' };
+    const mod = (kind === 'maybe' || kind === 'hit') ? ' is-' + kind : '';
+
+    this.els.verdict.className = 'readout' + mod;
+    this.els.vState.textContent = states[kind] || states.idle;
+    this.els.vPct.textContent = pct === null || pct === undefined
+      ? '\u2014\u2014'
+      : String(pct).padStart(2, '0');
+    this.els.vMeter.style.width = (pct === null || pct === undefined ? 0 : pct) + '%';
     this.els.vTitle.textContent = title;
     this.els.vSub.textContent = sub;
   },
@@ -674,12 +693,20 @@ const Scanner = {
     ctx.drawImage(this.els.overlay, 0, 0, c.width, c.height);
 
     const stamp = new Date().toISOString();
-    ctx.fillStyle = 'rgba(0,0,0,0.65)';
-    ctx.fillRect(0, c.height - Math.round(c.height * 0.06), c.width, Math.round(c.height * 0.06));
-    ctx.fillStyle = '#fff';
-    ctx.font = '500 ' + Math.round(c.width / 46) + 'px ui-monospace, monospace';
+    const bar = Math.round(c.height * 0.055);
+    ctx.fillStyle = 'rgba(8, 8, 10, 0.82)';
+    ctx.fillRect(0, c.height - bar, c.width, bar);
+    ctx.strokeStyle = 'rgba(237, 235, 230, 0.18)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, c.height - bar + 0.5);
+    ctx.lineTo(c.width, c.height - bar + 0.5);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(237, 235, 230, 0.75)';
+    ctx.font = '500 ' + Math.round(c.width / 58) + 'px "JetBrains Mono", ui-monospace, monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('Scanner · ' + stamp, Math.round(c.width * 0.02), c.height - Math.round(c.height * 0.021));
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SCANNER \u2014 ' + stamp, Math.round(c.width * 0.025), c.height - bar / 2);
 
     c.toBlob((blob) => {
       if (!blob) return;

@@ -5,71 +5,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sweep &mdash; Scanner</title>
 <meta name="description" content="A guided, zone-by-zone physical search of a room for concealed cameras, ordered by where they are actually found.">
-<meta name="theme-color" content="#0a0c0f">
+<meta name="theme-color" content="#08080a">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/jetbrains-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="index.html">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="#2dd4bf" stroke-width="1.7"/>
-        <circle cx="12" cy="12" r="3.4" stroke="#2dd4bf" stroke-width="1.7"/>
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="#2dd4bf" stroke-width="1.7" stroke-linecap="round"/>
+<header class="masthead">
+  <div class="masthead__bar">
+    <a class="mark" href="index.html">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.1"/>
+        <circle cx="8" cy="8" r="1.7" fill="currentColor"/>
       </svg>
       Scanner
     </a>
-    <span class="brand-sub">hidden camera sweep</span>
+    <span class="mark__meta">Room sweep</span>
   </div>
-  <nav class="tabs" aria-label="Sections">
-    <a class="tab" href="index.html">Start</a>
-    <a class="tab" href="scan.html">Scan</a>
-    <a class="tab" href="sweep.html">Sweep</a>
-    <a class="tab" href="guide.html">Guide</a>
-    <a class="tab" href="legal.html">Legal</a>
-    <a class="tab" href="report.html">Report</a>
+  <nav class="nav" aria-label="Sections">
+    <a href="index.html">Start</a>
+    <a href="scan.html">Scan</a>
+    <a href="sweep.html">Sweep</a>
+    <a href="guide.html">Guide</a>
+    <a href="legal.html">Legal</a>
+    <a href="report.html">Report</a>
   </nav>
 </header>
 
-<main class="wrap">
+<main class="wrap wrap--wide">
 
-  <div class="zone-nav" id="zoneNav" role="group" aria-label="Sweep zones"></div>
-  <div class="progress"><i id="progBar" style="width:0%"></i></div>
-  <p class="small" id="progText" style="margin-top:-6px">0 of 0 checkpoints</p>
+  <div class="zones" id="zoneNav" role="group" aria-label="Sweep zones"></div>
+  <div class="prog">
+    <span class="prog__bar"><i id="progBar" style="width:0%"></i></span>
+    <span class="prog__txt" id="progText">0 / 0</span>
+  </div>
 
   <div id="zoneBody"></div>
-
   <div id="zoneDone" hidden></div>
 
-  <div class="btn-row" style="margin:16px 0 8px">
-    <button class="btn" id="btnPrev" type="button">&larr; Previous</button>
-    <button class="btn btn-primary" id="btnNext" type="button">Next zone &rarr;</button>
+  <div class="row" style="margin:34px 0 10px">
+    <button class="btn" id="btnPrev" type="button">Previous</button>
+    <button class="btn btn--primary" id="btnNext" type="button">Next zone</button>
   </div>
-  <div class="btn-row">
-    <a class="btn btn-sm" href="scan.html">Open the scanner</a>
-    <button class="btn btn-sm btn-danger" id="btnReset" type="button">Reset sweep</button>
-  </div>
-
-  <div class="note" style="margin-top:20px">
-    <strong>Tick means checked, not safe</strong>
-    The tick is a memory aid so you do not lose your place halfway through a room at midnight. Anything you mark with the warning sign goes into the report with a timestamp.
+  <div class="row">
+    <a class="btn btn--sm" href="scan.html">Open the scanner</a>
+    <button class="btn btn--sm btn--alert" id="btnReset" type="button">Reset sweep</button>
   </div>
 
-  <h2>Three things worth doing before you start</h2>
-  <ul>
-    <li><strong>Do the sweep before you unpack</strong>, while the room is still exactly as it was handed to you. A room you have lived in for an hour is much harder to read.</li>
-    <li><strong>Photograph the room on arrival</strong>, wide shots from each corner. If you find something later, you will want to show what was where at the start.</li>
-    <li><strong>Trust the thing that feels slightly wrong.</strong> In almost every reported case in the <a href="guide.html">guide</a>, somebody found the camera because an object was somewhere it had no business being &mdash; wiring on a dustbin, a phone left face-down, a smoke detector aimed at a bed.</li>
-  </ul>
+  <section class="sec">
+    <span class="label">Before you start</span>
+    <div class="index">
+      <div class="index__row"><span class="index__num">01</span><span class="index__body">
+        <h3>Sweep before you unpack</h3>
+        <p>Do it while the room is still exactly as it was handed to you. A room you have lived in for an hour is much harder to read.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">02</span><span class="index__body">
+        <h3>Photograph the room on arrival</h3>
+        <p>Wide shots from each corner. If you find something later, you will want to show what was where at the start.</p>
+      </span></div>
+      <div class="index__row"><span class="index__num">03</span><span class="index__body">
+        <h3>Trust the thing that feels slightly wrong</h3>
+        <p>In almost every reported case in the <a class="inline-link" href="guide.html">guide</a>, somebody found the camera because an object was somewhere it had no business being &mdash; wiring on a dustbin, a phone left face-down, a smoke detector aimed at a bed.</p>
+      </span></div>
+    </div>
+
+    <div class="aside" style="margin-top:30px">
+      <span class="label">Marking</span>
+      <p><strong>Clear</strong> means checked, not safe &mdash; it is a memory aid so you do not lose your place halfway through a room at midnight. <strong>Flag</strong> puts the checkpoint into the report with a timestamp.</p>
+    </div>
+  </section>
 
 </main>
 
 <footer>
-  <div class="wrap">
-    <p><strong>Scanner</strong> runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account and no analytics. Your findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
-    <p>This is a search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
+  <div class="wrap wrap--wide">
+    <p>Scanner runs entirely in your browser. Nothing you scan, flag or write is uploaded &mdash; there is no server, no account, no analytics. Findings live in this browser&rsquo;s local storage and clearing site data erases them.</p>
+    <p>A search aid, not a guarantee. A clean sweep means you did not find a camera, which is not the same as there not being one. Nothing here is legal advice.</p>
   </div>
 </footer>
 <script src="js/data.js"></script>

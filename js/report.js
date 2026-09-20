@@ -31,16 +31,15 @@ const Report = {
 
     list.slice().reverse().forEach((f) => {
       const div = document.createElement('div');
-      div.className = 'findings-item';
+      div.className = 'finding';
       div.innerHTML =
-        '<h4>' + this.esc(f.title) + '</h4>' +
-        '<div class="meta">' + this.esc(f.zone) + ' · ' + fmtTime(f.at) + '</div>' +
-        (f.note ? '<p class="small" style="margin:6px 0 0">' + this.esc(f.note) + '</p>' : '');
+        '<span class="label">' + this.esc(f.zone) + ' — ' + fmtTime(f.at) + '</span>' +
+        '<h3>' + this.esc(f.title) + '</h3>' +
+        (f.note ? '<p>' + this.esc(f.note) + '</p>' : '');
 
       const del = document.createElement('button');
-      del.className = 'btn btn-sm';
+      del.className = 'btn btn--sm';
       del.type = 'button';
-      del.style.marginTop = '9px';
       del.textContent = 'Remove';
       del.addEventListener('click', () => {
         Findings.remove(f.id);

@@ -32,6 +32,26 @@ Pages. Drop the folder in and it runs.
 | `js/scanner.js` | The detection engine |
 | `js/data.js` | Device taxonomy, case file, sweep checkpoints |
 | `sw.js` | Offline cache — the tool works with no network at all |
+| `assets/fonts/` | Self-hosted Inter + JetBrains Mono subsets |
+
+## Design
+
+Dark-only, on purpose: this gets used in dim rooms at night, and a second theme
+would be two half-committed designs instead of one.
+
+Four rules hold throughout:
+
+- **The interface is monochrome until it finds something.** Colour is information,
+  not decoration. Red means a detection or a danger, amber means uncertain, and
+  nothing else anywhere is coloured. When colour appears, it means something.
+- **No cards.** Hairline rules and space do the separating.
+- **Square geometry**, radii 0-3px. This is an instrument, not a dashboard.
+- **Prose is Inter, every number and label is mono.** That split is what makes
+  readings read as readings.
+
+Type is Inter and JetBrains Mono, latin subsets self-hosted in `assets/fonts`
+(80KB total, both SIL Open Font License) so the site stays offline-capable and
+makes no third-party requests.
 
 ## How the detection actually works
 

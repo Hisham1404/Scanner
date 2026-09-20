@@ -14,7 +14,7 @@ const DEVICE_TYPES = [
   {
     id: 'disguised',
     name: 'Disguised object camera',
-    detail: 'A working camera built into an everyday object. Sold openly in India on marketplaces as "nanny cams" for roughly ₹1,500–₹8,000.',
+    detail: 'A working camera built into an everyday object. Sold openly in India on marketplaces as “nanny cams” for roughly ₹1,500–₹8,000.',
     seen: 'Chargers and power adapters, wall clocks, photo frames, pens, bulb holders, smoke detectors, Wi-Fi routers, Bluetooth speakers, tissue boxes, air fresheners.',
     network: 'partial',
     glint: 'yes',
